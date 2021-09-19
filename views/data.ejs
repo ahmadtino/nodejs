@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data</title>
+</head>
+<body>
+    <h1>Data Matkul</h1>
+    <a href="/form">Form</a>
+    <a href="/data">Data</a>
+    <hr>
+    <% for (let i = 0; i < matkul.length; i++) { %>
+    <div>
+        <h3><%= matkul[i].nama %></h3>
+        <h4><%= matkul[i].kode %></h4>
+        <p>Dosen : <%= matkul[i].dosen %></p>
+        <input type="hidden" name="idmatkul" value="<%= matkul[i].id %>">
+        <button class="delete">Delete</button>
+        <p class="deleting"></p>
+        <hr>
+    </div>
+    <% } %>
+</body>
+<script>
+    const btn = document.getElementsByClassName('delete');
+    const input = document.getElementsByName('idmatkul');
+    const deleting = document.getElementsByClassName('deleting');
+    for (let i = 0; i < input.length; i++) {
+        let id = input[i].value
+        let url = "http://localhost:3000/deletedata/" + id;
+        btn[i].addEventListener("click", () => {
+            deleting[i].innerHTML = "Deleting...";
+
+            fetch(url, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                deleting[i].innerHTML = data.message;
+                location.reload();
+            })
+            .catch(err => {
+                deleting[i].innerHTML = err;
+            });
+        })
+    }
+</script>
+</html>

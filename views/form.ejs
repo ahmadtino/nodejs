@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <h1>Form</h1>
+    <a href="/form">Form</a>
+    <a href="/data">Data</a>
+    <form>
+        <input name="nama" id="nama" type="text" placeholder="Nama Matkul">
+        <input name="kode" id="kode" type="text" placeholder="Kode Matkul">
+        <input name="dosen" id="dosen" type="text" placeholder="Dosen Matkul">
+        <button type="submit">Submit</button>
+        <p id="submitting"></p>
+    </form>
+</body>
+<script>
+    const form = document.querySelector('form');
+    const submitting = document.getElementById('submitting'); 
+
+    form.addEventListener("submit", (event) => {
+        const nama = document.getElementById('nama').value;
+        const kode = document.getElementById('kode').value;
+        const dosen = document.getElementById('dosen').value;
+
+        submitting.innerHTML = "Submitting...";
+        fetch("http://localhost:3000/postdata", {
+            method: "POST",
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({
+                nama: nama,
+                kode: kode,
+                dosen: dosen
+            })
+        })
+        .then(response => response.json())
+        .then((data) => {
+            submitting.innerHTML = data.message;
+        })
+        .catch((err) => {
+            submitting.innerHTML = err;
+        })
+    event.preventDefault();
+    })
+
+    
+</script>
+</html>
